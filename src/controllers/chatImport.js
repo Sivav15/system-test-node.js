@@ -1,4 +1,5 @@
 const xlsx = require("xlsx");
+const db = require("../config/db");
 
 const chatImport = async (req, res) => {
   try {
@@ -7,14 +8,16 @@ const chatImport = async (req, res) => {
     const sheet = workbook.Sheets[sheetName];
     const jsonData = xlsx.utils.sheet_to_json(sheet);
 
-    const charts = jsonData.map((row) => {
+    const chats = jsonData.map((row) => {
       return {
         message: row["Message"],
         sender: row["Sender"],
       };
     });
 
-    res.json(charts);
+    await db.Chats.bulkCreate(chats);
+
+    res.json({ message: "Chats imported successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to process the uploaded file" });

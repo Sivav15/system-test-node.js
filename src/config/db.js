@@ -1,6 +1,7 @@
 const { Sequelize } = require("sequelize");
 const UserModel = require("../models/UserModel");
 const dotenv = require("dotenv");
+const ChatModel = require("../models/ChatModel");
 dotenv.config();
 
 const sequelize = new Sequelize(
@@ -20,6 +21,7 @@ const sequelize = new Sequelize(
 
 const db = {};
 db.Users = UserModel(sequelize);
+db.Chats = ChatModel(sequelize);
 // // sync all models with database
 sequelize.sync({ alter: true });
 
