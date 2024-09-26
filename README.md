@@ -4,7 +4,7 @@
 
 - User Registration
 - Login API with JWT Token Generation
-  -Chat History Imported via Excel
+- Chat History Imported via Excel
 - Task Filtering (All, Completed, Pending)
 
 ## Requirement
