@@ -1,7 +1,9 @@
 const { DataTypes } = require("sequelize");
+const { sequelize } = require("../config/db");
 
-function UserModel(sequelize) {
-  const attributes = {
+const UserModel = sequelize.define(
+  "Users",
+  {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -16,20 +18,17 @@ function UserModel(sequelize) {
       type: DataTypes.STRING,
       allowNull: false,
     },
-  };
-
-  const options = {
-    freezeTableName: true,
-    timestamps: false,
+  },
+  {
+    freezeTableName: true, // Keeps the table name as 'User'
+    timestamps: false, // Disables createdAt and updatedAt fields
     indexes: [
       {
         unique: true,
-        fields: ["email"],
+        fields: ["email"], // Define the unique constraint via an index
       },
     ],
-  };
-
-  return sequelize.define("Users", attributes, options);
-}
+  }
+);
 
 module.exports = UserModel;

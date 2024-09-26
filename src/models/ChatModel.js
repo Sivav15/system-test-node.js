@@ -1,34 +1,20 @@
 const { DataTypes } = require("sequelize");
+const { sequelize } = require("../config/db");
 
-function ChatModel(sequelize) {
-  const attributes = {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull: false,
-      primaryKey: true,
-    },
-    message: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    sender: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  };
-
-  const options = {
-    freezeTableName: true,
-    timestamps: false,
-    indexes: [
-      {
-        fields: ["sender"],
-      },
-    ],
-  };
-
-  return sequelize.define("Chats", attributes, options);
-}
+const ChatModel = sequelize.define("Chats", {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
+  },
+  message: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  sender: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+});
 
 module.exports = ChatModel;

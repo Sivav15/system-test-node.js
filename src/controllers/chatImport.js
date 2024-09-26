@@ -1,5 +1,5 @@
 const xlsx = require("xlsx");
-const db = require("../config/db");
+const ChatModel = require("../models/ChatModel");
 
 const chatImport = async (req, res) => {
   try {
@@ -15,9 +15,9 @@ const chatImport = async (req, res) => {
       };
     });
 
-    await db.Chats.bulkCreate(chats);
+    const data = await ChatModel.bulkCreate(chats);
 
-    res.json({ message: "Chats imported successfully" });
+    res.json({ message: "Chats imported successfully", data });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to process the uploaded file" });

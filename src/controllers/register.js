@@ -1,11 +1,11 @@
-const db = require("../config/db");
 const bcrypt = require("bcryptjs");
+const UserModel = require("../models/UserModel");
 
 const register = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const existingUser = await db.Users.findOne({
+    const existingUser = await UserModel.findOne({
       where: { email },
     });
 
@@ -16,9 +16,10 @@ const register = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = db.Users.create({ email, password: hashedPassword });
+    const user = await UserModel.create({ email, password: hashedPassword });
     res.status(201).json({
-      user,
+      id: user.id,
+      email: user.email,
       message: "User Registered successfull.",
     });
   } catch (error) {

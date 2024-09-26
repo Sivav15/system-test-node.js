@@ -1,12 +1,12 @@
-const db = require("../config/db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const UserModel = require("../models/UserModel");
 
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const existingUser = await db.Users.findOne({
+    const existingUser = await UserModel.findOne({
       where: { email },
     });
 
@@ -40,7 +40,7 @@ const login = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400).json({
-      message: "User Registered failed",
+      message: "User login failed",
     });
   }
 };
