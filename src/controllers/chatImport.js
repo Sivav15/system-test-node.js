@@ -6,7 +6,15 @@ const chatImport = async (req, res) => {
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
     const jsonData = xlsx.utils.sheet_to_json(sheet);
-    res.json(jsonData);
+
+    const charts = jsonData.map((row) => {
+      return {
+        message: row["Message"],
+        sender: row["Sender"],
+      };
+    });
+
+    res.json(charts);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to process the uploaded file" });
