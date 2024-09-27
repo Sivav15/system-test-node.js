@@ -1,8 +1,8 @@
-const db = require("../config/db");
+import { Request, Response } from "express";
 
-const task = async (req, res) => {
+const task = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const filter = req.query.filter || "all";
+    const filter: string = req.query.filter as string || "all";
 
     let tasks = [
       { task: "task1", status: "completed" },
@@ -10,20 +10,22 @@ const task = async (req, res) => {
       { task: "task3", status: "completed" },
     ];
 
+    // Filter tasks based on the query parameter
     if (filter === "completed") {
       tasks = tasks.filter((task) => task.status === "completed");
     } else if (filter === "pending") {
       tasks = tasks.filter((task) => task.status === "pending");
     }
 
-    res.status(200).json(tasks);
+    return res.status(200).json(tasks);
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
-    res.status(400).json({
-      message: "task send failed",
+    return res.status(400).json({
+      message: "Task retrieval failed",
     });
   }
 };
+
 
 module.exports = task;
