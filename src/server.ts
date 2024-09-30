@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response, NextFunction, Express} from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRoute from "./routes/auth";
@@ -7,7 +7,7 @@ import { sequelize } from "./config/db";
 
 dotenv.config();
 
-const app = express();
+const app:Express = express();
 
 app.use(express.json());
 app.use(cors());
@@ -17,7 +17,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // Error handling middleware
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({
     message: "Internal Server Error",
   });
