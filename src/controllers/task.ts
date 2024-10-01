@@ -1,10 +1,22 @@
 import { Request, Response } from "express";
 
-const task = async (req: Request, res: Response): Promise<Response> => {
-  try {
-    const filter: string = req.query.filter as string || "all";
 
-    let tasks = [
+interface CustomRequest extends Request {
+  query: {
+    filter?: string; 
+  };
+}
+
+interface Task {
+  task:string;
+  status:string
+}
+
+const task = async (req: CustomRequest, res: Response): Promise<Response> => {
+  try {
+    const filter:string = req.query.filter || "all";
+
+    let tasks:Task[] = [
       { task: "task1", status: "completed" },
       { task: "task2", status: "pending" },
       { task: "task3", status: "completed" },

@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response, NextFunction, Express} from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRoute from "./routes/auth";
@@ -7,7 +7,8 @@ import { sequelize } from "./config/db";
 
 dotenv.config();
 
-const app = express();
+const app:Express = express();
+const PORT:string = process.env.PORT as string;
 
 app.use(express.json());
 app.use(cors());
@@ -17,7 +18,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // Error handling middleware
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({
     message: "Internal Server Error",
   });
@@ -28,8 +29,8 @@ sequelize
   .sync({ alter: true }) // Sync all models
   .then(() => {
     console.log("Database synced!");
-    app.listen(process.env.PORT, () =>
-      console.log(`Server is running on the port: ${process.env.PORT}`)
+    app.listen(PORT, () =>
+      console.log(`Server is running on the port: ${PORT}`)
     );
   })
   .catch((err: Error) => console.error("Error syncing the database:", err));

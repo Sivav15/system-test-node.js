@@ -8,11 +8,19 @@ interface JwtPayload {
   id: string;
 }
 
-const login = async (req: Request, res: Response): Promise<Response> => {
+interface CustomRequest extends Request {
+  body: {
+    email: string;
+    password: string;
+  };
+}
+
+const login = async (req: CustomRequest, res: Response): Promise<Response> => {
   try {
     const { email, password } = req.body;
+    
 
-    const existingUser = await UserModel.findOne({
+    const existingUser:UserModel | null = await UserModel.findOne({
       where: { email },
     });
 
@@ -22,7 +30,7 @@ const login = async (req: Request, res: Response): Promise<Response> => {
       });
     }
 
-    const isValidPassword = await bcrypt.compare(password, existingUser.password);
+    const isValidPassword:boolean = await bcrypt.compare(password, existingUser.password);
 
     if (!isValidPassword) {
       return res.status(400).json({
@@ -40,7 +48,7 @@ const login = async (req: Request, res: Response): Promise<Response> => {
 
     const token = jwt.sign(
       { id: existingUser.id } as JwtPayload,
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET as string,
       {
         expiresIn: "1h",
       }
@@ -54,7 +62,7 @@ const login = async (req: Request, res: Response): Promise<Response> => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
+    return res.status(400).json({
       message: "User login failed. Please try again.",
     });
   }

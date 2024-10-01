@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-
 dotenv.config();
 
+
 const authenticateJWT = (req: Request, res: Response, next: NextFunction): Response | void => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+  const authHeader:string | undefined = req.headers["authorization"];
+  const token:string | undefined = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
     return res.status(401).json({ message: "Access Token Required" });
@@ -16,7 +16,6 @@ const authenticateJWT = (req: Request, res: Response, next: NextFunction): Respo
     if (err) {
       return res.status(401).json({ message: "Access Token Expired" });
     }
-   
     next();
   });
 };
