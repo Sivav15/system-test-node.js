@@ -8,6 +8,7 @@ import { sequelize } from "./config/db";
 dotenv.config();
 
 const app:Express = express();
+const PORT:string = process.env.PORT as string;
 
 app.use(express.json());
 app.use(cors());
@@ -28,8 +29,8 @@ sequelize
   .sync({ alter: true }) // Sync all models
   .then(() => {
     console.log("Database synced!");
-    app.listen(process.env.PORT, () =>
-      console.log(`Server is running on the port: ${process.env.PORT}`)
+    app.listen(PORT, () =>
+      console.log(`Server is running on the port: ${PORT}`)
     );
   })
   .catch((err: Error) => console.error("Error syncing the database:", err));
